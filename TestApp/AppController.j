@@ -33,16 +33,15 @@
 
     [theWindow orderFront:self];
 
-    foo = 12345;
-    
-    window.setTimeout(function() {
-        LeakHelper.find(function(o) {
-            return (o === 12345);
-        });
-    }, 1000)
-
     // Uncomment the following line to turn on the standard menu bar.
     //[CPMenu setMenuBarVisible:YES];
+
+    foo = {};
+
+    window.setTimeout(function() {
+        var needle = foo;
+        LeakHelper.runTestsBrowser(function(o) { return (o === needle); });
+    }, 1000);
 }
 
 @end
