@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>untitled</title>
+    <script type="text/javascript" charset="utf-8" src="leakhelper.js"></script>
+    <script type="text/javascript" charset="utf-8" src="leakhelper-test.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        window.onload = function() {
+            window.foo = {
+                bar : {
+                    baz : {}
+                }
+            }
+
+            var needle = window.foo.bar.baz;
+            LeakHelperTest.runTestsBrowser(function(o) { return (o === needle); });
+
+            // var before = {};
+            // LeakHelper.find(function(object, path) {
+            //     var hash = LeakHelper.pathArrayToHash(path);
+            //     before[hash] = object;
+            // });
+            // 
+            // blah = 1234;
+            // foo.bar.baz = 2345;
+            // 
+            // LeakHelper.find(function(object, path) {
+            //     var hash = LeakHelper.pathArrayToHash(path);
+            //     return (before.hasOwnProperty(hash) && before[hash] === object);
+            // });
+        }
+    </script>
+</head>
+<body></body>
+</html>

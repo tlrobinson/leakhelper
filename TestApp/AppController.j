@@ -40,8 +40,19 @@
 
     window.setTimeout(function() {
         var needle = foo;
-        LeakHelper.runTestsBrowser(function(o) { return (o === needle); });
+        LeakHelperTest.runTestsBrowser(function(o) { return o === needle });
     }, 1000);
 }
 
 @end
+
+function isCPView(o) {
+    var c = o && o.isa;
+    while (c) {
+        if (c === CPView)
+            return true;
+        else
+            c = c.super_class;
+    }
+    return false;
+}
