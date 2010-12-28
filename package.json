@@ -1,0 +1,6 @@
+{
+    "name": "leakhelper",
+    "version": "0.2",
+    "description": "JavaScript memory leak finding helper thingy",
+    "author": "Tom Robinson (http://tlrobinson.net/) <tlrobinson@gmail.com>"
+}
