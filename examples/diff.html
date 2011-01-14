@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title></title>
+	<script type="text/javascript" charset="utf-8" src="../lib/leakhelper.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        (function() {
+            window.foo = true;
+            window.a = { b : true };
+
+            var before = listObjects();
+
+            window.bar = true;
+            delete window.foo;
+
+            a.c = true;
+            delete a.b;
+
+            // Note Klass will be found through the __proto__ and constructor properties even though it's locally scoped here.
+            function Klass() {};
+            window.instance = new Klass();
+
+            var after = listObjects();
+
+            for (var key in before)
+                if (has(before, key) && !has(after, key))
+                    console.log("REMOVED: ", LeakHelper.pathArrayToString(LeakHelper.pathHashToArray(key)), before[key]);
+
+            for (var key in after)
+                if (has(after, key) && !has(before, key))
+                    console.log("ADDED: ", LeakHelper.pathArrayToString(LeakHelper.pathHashToArray(key)), after[key]);
+        })();
+
+        // helper function lists all objects traversed:
+        function listObjects() {
+            var objects = {};
+            LeakHelper.find({
+                silent : true,
+                checker : function(object, path) {
+                    var hash = LeakHelper.pathArrayToHash(path);
+                    objects[hash] = object;
+                }
+            });
+            return objects;
+        }
+
+        // hasOwnProperty alias
+        function has(object, property) {
+            return Object.prototype.hasOwnProperty.call(object, property);
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
