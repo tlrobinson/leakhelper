@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title></title>
+	<script type="text/javascript" charset="utf-8" src="../lib/leakhelper.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        // Finds all unique properties named "addEventListener":
+        LeakHelper.find(function(object, path) {
+            if (path[path.length - 1] === "addEventListener") {
+                var parent = getPropertyAtPath(window, path.slice(0, -1));
+                console.log(path);
+            }
+        });
+
+        function getPropertyAtPath(object, path) {
+            var i = 0;
+            while (i < path.length && object != null) {
+                object = object[path[i++]];
+            }
+            return object;
+        }
+    </script>
+</head>
+<body></body>
+</html>
