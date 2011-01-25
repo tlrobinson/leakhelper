@@ -7,13 +7,19 @@
 	<title></title>
 	<script type="text/javascript" charset="utf-8" src="../lib/leakhelper.js"></script>
     <script type="text/javascript" charset="utf-8">
+        var s = new LeakHelper.SimpleSet()
+
         // Finds all unique properties named "addEventListener":
         LeakHelper.find(function(object, path) {
+            if (object == window.applicationCache.addEventListener)
+                console.error(path);
             if (path[path.length - 1] === "addEventListener") {
                 var parent = getPropertyAtPath(window, path.slice(0, -1));
                 console.log(path);
+                s.add(object);
             }
         });
+        console.log(s.bucket.length);
 
         function getPropertyAtPath(object, path) {
             var i = 0;
